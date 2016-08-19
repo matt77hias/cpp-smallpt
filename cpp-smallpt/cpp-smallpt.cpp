@@ -32,6 +32,16 @@ inline bool Intersect(const Ray &ray, int &id) {
 	return hit;
 }
 
+
+inline bool Intersect(const Ray &ray) {
+	const size_t n = (size_t)(sizeof(spheres) / sizeof(Sphere));
+	for (size_t i = 0; i < n; ++i)
+		if (spheres[i].Intersect(ray))
+			return true;
+	return false;
+}
+
+
 Vector3 Radiance(const Ray &ray, RNG &rng) {
 	Ray r = ray;
 	Vector3 L;
