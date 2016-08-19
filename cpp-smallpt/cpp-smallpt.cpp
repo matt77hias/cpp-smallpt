@@ -72,7 +72,7 @@ Vector3 Radiance(const Ray &ray, RNG &rng) {
 			break;
 		}
 		default: {
-			const Vector3 w = n.Dot(d) < 0 ? n : -n;
+			const Vector3 w = n.Dot(r.d) < 0 ? n : -n;
 			const Vector3 u = ((std::abs(w.x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w)).Normalize();
 			const Vector3 v = w.Cross(u);
 
