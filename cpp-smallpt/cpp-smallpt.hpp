@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#include "math_tools.h"
-#include "vector.h"
-#include "geometry.h"
+#include "math_tools.hpp"
+#include "vector.hpp"
+#include "geometry.hpp"
 
-#include "rng.h"
-#include "sampling.h"
+#include "rng.hpp"
+#include "sampling.hpp"
 
-#include "imageio.h"
+#include "imageio.hpp"

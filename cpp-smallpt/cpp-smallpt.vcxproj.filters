@@ -24,38 +24,38 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="vector.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="imageio.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="math_tools.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="rng.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="sampling.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="specular.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="sphere.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp-smallpt.hpp">
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="rng.h">
+    <ClInclude Include="targetver.h">
       <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="math_tools.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="cpp-smallpt.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="imageio.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="geometry.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="sphere.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="specular.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="sampling.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="vector.h">
-      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "cpp-smallpt.h"
-
 enum Reflection_t { DIFFUSE, SPECULAR, REFRACTIVE };
 
 #define EPSILON_SPHERE 1e-4

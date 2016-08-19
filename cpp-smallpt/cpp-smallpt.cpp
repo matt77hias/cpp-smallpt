@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include "sphere.h"
-#include "specular.h"
+#include "sphere.hpp"
+#include "specular.hpp"
 
 // Scene
 #define REFRACTIVE_INDEX_OUT 1.0
