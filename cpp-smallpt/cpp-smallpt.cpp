@@ -100,8 +100,8 @@ int main(int argc, char *argv[]) {
 	RNG rng;
 	const int nb_samples = (argc == 2) ? atoi(argv[1]) / 4 : 1;
 
-	const int w = 512;
-	const int h = 384; 
+	const int w = 1024;
+	const int h = 768;
 	
 	const Vector3 eye = Vector3(50, 52, 295.6);
 	const Vector3 gaze = Vector3(0, -0.042612, -1).Normalize();
