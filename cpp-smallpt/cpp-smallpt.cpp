@@ -20,9 +20,9 @@ Sphere spheres[] = {
 };
 
 
-inline bool Intersect(const Ray &ray, int &id) {
+inline bool Intersect(const Ray &ray, size_t &id) {
 	bool hit = false;
-	const size_t n = (size_t)(sizeof(spheres) / sizeof(Sphere));
+	const size_t n = sizeof(spheres) / sizeof(Sphere);
 	for (size_t i = 0; i < n; ++i) {
 		if (spheres[i].Intersect(ray)) {
 			hit = true;
@@ -34,7 +34,7 @@ inline bool Intersect(const Ray &ray, int &id) {
 
 
 inline bool Intersect(const Ray &ray) {
-	const size_t n = (size_t)(sizeof(spheres) / sizeof(Sphere));
+	const size_t n = sizeof(spheres) / sizeof(Sphere);
 	for (size_t i = 0; i < n; ++i)
 		if (spheres[i].Intersect(ray))
 			return true;
@@ -48,7 +48,7 @@ Vector3 Radiance(const Ray &ray, RNG &rng) {
 	Vector3 F(1.0);
 
 	while (true) {
-		int id;
+		size_t id;
 		if (!Intersect(r, id))
 			return L;
 
@@ -94,6 +94,7 @@ Vector3 Radiance(const Ray &ray, RNG &rng) {
 	}
 }
 
+#define OPENMP
 
 int main(int argc, char *argv[]) {
 	RNG rng;
@@ -110,10 +111,14 @@ int main(int argc, char *argv[]) {
 
 	Vector3 *Ls = new Vector3[w * h];
 
-#pragma omp parallel for schedule(dynamic, 1) private(r)
-	
+#ifdef OPENMP
+#pragma omp parallel for schedule(static)
+#endif
+
 	for (int y = 0; y < h; ++y) { // pixel row
+#ifndef OPENMP
 		fprintf(stderr, "\rRendering (%d spp) %5.2f%%", nb_samples * 4, 100.0 * y / (h - 1));
+#endif
 		for (int x = 0; x < w; ++x) // pixel column
 			for (int sy = 0, i = (h - 1 - y) * w + x; sy < 2; ++sy) // 2 subpixel row
 				for (int sx = 0; sx < 2; ++sx) { // 2 subpixel column
