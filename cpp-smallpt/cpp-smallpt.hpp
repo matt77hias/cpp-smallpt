@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string>
+using std::string;
 #include <tchar.h>
 
 #include "math_tools.hpp"
