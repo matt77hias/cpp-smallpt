@@ -59,7 +59,7 @@ Vector3 Radiance(const Ray &ray, RNG &rng) {
 		L += F * shape.e;
 		F *= shape.f;
 		
-		// Russion roulette
+		// Russian roulette
 		if (r.depth > 4) {
 			const double continue_probability = shape.f.Max();
 			if (rng.UniformFloat() >= continue_probability)
