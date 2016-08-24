@@ -20,7 +20,7 @@ Sphere spheres[] = {
 };
 
 
-inline bool Intersect(const Ray &ray, size_t &id) {
+bool Intersect(const Ray &ray, size_t &id) {
 	bool hit = false;
 	const size_t n = sizeof(spheres) / sizeof(Sphere);
 	for (size_t i = 0; i < n; ++i) {
@@ -33,7 +33,7 @@ inline bool Intersect(const Ray &ray, size_t &id) {
 }
 
 
-inline bool Intersect(const Ray &ray) {
+bool Intersect(const Ray &ray) {
 	const size_t n = sizeof(spheres) / sizeof(Sphere);
 	for (size_t i = 0; i < n; ++i)
 		if (spheres[i].Intersect(ray))
