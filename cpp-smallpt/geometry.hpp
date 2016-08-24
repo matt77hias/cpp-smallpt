@@ -5,7 +5,7 @@ struct Ray {
 	Ray(const Vector3 &o, const Vector3 &d, double tmin = 0.0, double tmax = INFINITY, int depth = 0) 
 			: o(o), d(d), tmin(tmin), tmax(tmax), depth(depth) {};
 	
-	Vector3 operator()(double t) const { return o + d * t; }
+	inline Vector3 operator()(double t) const { return o + d * t; }
 
 	friend inline std::ostream &operator<<(std::ostream& os, const Ray &r) {
 		os << "o: " << r.o << std::endl;
