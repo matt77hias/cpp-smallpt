@@ -24,7 +24,7 @@ struct Sphere {
 		// t = (- 2 * d . (o - p) +- 2 * sqrt(D)) / (2 * (d . d))
 		// <=> t = dop +- sqrt(D)
 
-		Vector3 op = p - ray.o;
+		const Vector3 op = p - ray.o;
 		const double dop = ray.d.Dot(op);
 		const double D = dop * dop - op.Dot(op) + r * r;
 

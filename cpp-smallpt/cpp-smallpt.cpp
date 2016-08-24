@@ -86,7 +86,7 @@ Vector3 Radiance(const Ray &ray, RNG &rng) {
 			const Vector3 u = ((std::abs(w.x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w)).Normalize();
 			const Vector3 v = w.Cross(u);
 
-			const Vector3 sample_d = UniformSampleOnHemisphere(rng.UniformFloat(), rng.UniformFloat());
+			const Vector3 sample_d = CosineWeightedSampleOnHemisphere(rng.UniformFloat(), rng.UniformFloat());
 			const Vector3 d = (sample_d.x * u + sample_d.y * v + sample_d.z * w).Normalize();
 			r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.depth + 1);
 		}
