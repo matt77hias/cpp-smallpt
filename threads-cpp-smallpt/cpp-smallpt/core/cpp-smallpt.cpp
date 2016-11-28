@@ -160,6 +160,7 @@ int main(int argc, char *argv[]) {
 	WaitForAllTasks();
 	for (int y = 0; y < render_tasks.size(); ++y)
 		delete render_tasks[y];
+	TasksCleanup();
 	
 	WritePPM(w, h, Ls);
 
