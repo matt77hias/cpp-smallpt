@@ -94,8 +94,6 @@ Vector3 Radiance(const Ray &ray, RNG &rng) {
 	}
 }
 
-#define OPENMP
-
 int main(int argc, char *argv[]) {
 	RNG rng;
 	const int nb_samples = (argc == 2) ? atoi(argv[1]) / 4 : 1;
@@ -111,14 +109,8 @@ int main(int argc, char *argv[]) {
 
 	Vector3 *Ls = new Vector3[w * h];
 
-#ifdef OPENMP
 #pragma omp parallel for schedule(static)
-#endif
-
 	for (int y = 0; y < h; ++y) { // pixel row
-#ifndef OPENMP
-		fprintf(stderr, "\rRendering (%d spp) %5.2f%%", nb_samples * 4, 100.0 * y / (h - 1));
-#endif
 		for (int x = 0; x < w; ++x) // pixel column
 			for (int sy = 0, i = (h - 1 - y) * w + x; sy < 2; ++sy) // 2 subpixel row
 				for (int sx = 0; sx < 2; ++sx) { // 2 subpixel column

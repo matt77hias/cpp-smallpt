@@ -54,12 +54,24 @@
     <ClInclude Include="cpp-smallpt\core\vector.hpp">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="cpp-smallpt\core\lock.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp-smallpt\core\task.hpp">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp-smallpt\core\cpp-smallpt.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="cpp-smallpt\core\stdafx.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp-smallpt\core\task.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp-smallpt\core\lock.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>

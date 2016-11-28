@@ -156,6 +156,7 @@
     <ClInclude Include="cpp-smallpt\core\cpp-smallpt.hpp" />
     <ClInclude Include="cpp-smallpt\core\geometry.hpp" />
     <ClInclude Include="cpp-smallpt\core\imageio.hpp" />
+    <ClInclude Include="cpp-smallpt\core\lock.hpp" />
     <ClInclude Include="cpp-smallpt\core\math_tools.hpp" />
     <ClInclude Include="cpp-smallpt\core\rng.hpp" />
     <ClInclude Include="cpp-smallpt\core\sampling.hpp" />
@@ -163,16 +164,19 @@
     <ClInclude Include="cpp-smallpt\core\sphere.hpp" />
     <ClInclude Include="cpp-smallpt\core\stdafx.h" />
     <ClInclude Include="cpp-smallpt\core\targetver.h" />
+    <ClInclude Include="cpp-smallpt\core\task.hpp" />
     <ClInclude Include="cpp-smallpt\core\vector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp-smallpt\core\cpp-smallpt.cpp" />
+    <ClCompile Include="cpp-smallpt\core\lock.cpp" />
     <ClCompile Include="cpp-smallpt\core\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="cpp-smallpt\core\task.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
