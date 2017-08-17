@@ -1,19 +1,40 @@
 #pragma once
 
-struct Ray {
+#include "vector.hpp"
 
-	Ray(const Vector3 &o, const Vector3 &d, double tmin = 0.0, double tmax = INFINITY, int depth = 0) 
-			: o(o), d(d), tmin(tmin), tmax(tmax), depth(depth) {};
-	
-	inline Vector3 operator()(double t) const { return o + d * t; }
+namespace smallpt {
 
-	friend inline std::ostream &operator<<(std::ostream& os, const Ray &r) {
-		os << "o: " << r.o << std::endl;
-		os << "d: " << r.d << std::endl;
-		return os;
-	}
+	struct Ray final {
 
-	Vector3 o, d;
-	mutable double tmin, tmax;
-	int depth;
-};
+	public:
+
+		constexpr explicit Ray(const Vector3 &o, const Vector3 &d, 
+			double tmin = 0.0, double tmax = INFINITY, uint32_t depth = 0)
+			: m_o(o), m_d(d),
+			m_tmin(tmin), m_tmax(tmax), m_depth(depth) {};
+		constexpr explicit Ray(Vector3 &&o, Vector3 &&d,
+			double tmin = 0.0, double tmax = INFINITY, uint32_t depth = 0)
+			: m_o(std::move(o)), m_d(std::move(d)),
+			m_tmin(tmin), m_tmax(tmax), m_depth(depth) {};
+		constexpr Ray(const Ray &ray) = default;
+		constexpr Ray(Ray &&ray) = default;
+		~Ray() = default;
+
+		constexpr Ray &operator=(const Ray &ray) = default;
+		constexpr Ray &operator=(Ray &&ray) = default;
+
+		constexpr Vector3 operator()(double t) const { 
+			return m_o + m_d * t; 
+		}
+
+		friend inline std::ostream &operator<<(std::ostream& os, const Ray &r) {
+			os << "o: " << r.m_o << std::endl;
+			os << "d: " << r.m_d << std::endl;
+			return os;
+		}
+
+		Vector3 m_o, m_d;
+		mutable double m_tmin, m_tmax;
+		uint32_t m_depth;
+	};
+}

@@ -1,134 +1,153 @@
 #include "stdafx.h"
 
-#include "sphere.hpp"
-#include "specular.hpp"
-
-// Scene
 #define REFRACTIVE_INDEX_OUT 1.0
 #define REFRACTIVE_INDEX_IN 1.5
 
-Sphere spheres[] = {
-	Sphere(1e5,  Vector3(1e5 + 1, 40.8, 81.6),   Vector3(),   Vector3(0.75,0.25,0.25), DIFFUSE),	//Left
-	Sphere(1e5,  Vector3(-1e5 + 99, 40.8, 81.6), Vector3(),   Vector3(0.25,0.25,0.75), DIFFUSE),	//Right
-	Sphere(1e5,  Vector3(50, 40.8, 1e5),         Vector3(),   Vector3(0.75),           DIFFUSE),	//Back
-	Sphere(1e5,  Vector3(50, 40.8, -1e5 + 170),  Vector3(),   Vector3(),               DIFFUSE),	//Front
-	Sphere(1e5,  Vector3(50, 1e5, 81.6),         Vector3(),   Vector3(0.75),           DIFFUSE),	//Bottom
-	Sphere(1e5,  Vector3(50, -1e5 + 81.6, 81.6), Vector3(),   Vector3(0.75),           DIFFUSE),	//Top
-	Sphere(16.5, Vector3(27, 16.5, 47),          Vector3(),   Vector3(0.999),          SPECULAR),	//Mirror
-	Sphere(16.5, Vector3(73, 16.5, 78),          Vector3(),   Vector3(0.999),          REFRACTIVE),	//Glass
-	Sphere(600,	 Vector3(50, 681.6 - .27, 81.6), Vector3(12), Vector3(),               DIFFUSE)		//Light
-};
+namespace smallpt {
 
+	constexpr Sphere g_spheres[] = {
+		Sphere(1e5,  Vector3(1e5 + 1, 40.8, 81.6),   Vector3(),   Vector3(0.75,0.25,0.25), Reflection_t::Diffuse),	 //Left
+		Sphere(1e5,  Vector3(-1e5 + 99, 40.8, 81.6), Vector3(),   Vector3(0.25,0.25,0.75), Reflection_t::Diffuse),	 //Right
+		Sphere(1e5,  Vector3(50, 40.8, 1e5),         Vector3(),   Vector3(0.75),           Reflection_t::Diffuse),	 //Back
+		Sphere(1e5,  Vector3(50, 40.8, -1e5 + 170),  Vector3(),   Vector3(),               Reflection_t::Diffuse),	 //Front
+		Sphere(1e5,  Vector3(50, 1e5, 81.6),         Vector3(),   Vector3(0.75),           Reflection_t::Diffuse),	 //Bottom
+		Sphere(1e5,  Vector3(50, -1e5 + 81.6, 81.6), Vector3(),   Vector3(0.75),           Reflection_t::Diffuse),	 //Top
+		Sphere(16.5, Vector3(27, 16.5, 47),          Vector3(),   Vector3(0.999),          Reflection_t::Specular),	 //Mirror
+		Sphere(16.5, Vector3(73, 16.5, 78),          Vector3(),   Vector3(0.999),          Reflection_t::Refractive),//Glass
+		Sphere(600,	 Vector3(50, 681.6 - .27, 81.6), Vector3(12), Vector3(),               Reflection_t::Diffuse)	 //Light
+	};
 
-bool Intersect(const Ray &ray, size_t &id) {
-	bool hit = false;
-	const size_t n = sizeof(spheres) / sizeof(Sphere);
-	for (size_t i = 0; i < n; ++i) {
-		if (spheres[i].Intersect(ray)) {
-			hit = true;
-			id = i;
+	constexpr bool Intersect(const Ray &ray, size_t &id) noexcept {
+		bool hit = false;
+		const size_t n = sizeof(g_spheres) / sizeof(Sphere);
+		for (size_t i = 0; i < n; ++i) {
+			if (g_spheres[i].Intersect(ray)) {
+				hit = true;
+				id = i;
+			}
+		}
+		
+		return hit;
+	}
+
+	constexpr bool Intersect(const Ray &ray) noexcept {
+		const size_t n = sizeof(g_spheres) / sizeof(Sphere);
+		for (size_t i = 0; i < n; ++i) {
+			if (g_spheres[i].Intersect(ray)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	static Vector3 Radiance(const Ray &ray, RNG &rng) noexcept {
+		Ray r = ray;
+		Vector3 L;
+		Vector3 F(1.0);
+
+		while (true) {
+			size_t id;
+			if (!Intersect(r, id)) {
+				return L;
+			}
+
+			const Sphere &shape = g_spheres[id];
+			const Vector3 p = r(r.m_tmax);
+			const Vector3 n = (p - shape.m_p).Normalize();
+
+			L += F * shape.m_e;
+			F *= shape.m_f;
+
+			// Russian roulette
+			if (r.m_depth > 4) {
+				const double continue_probability = shape.m_f.Max();
+				if (rng.UniformFloat() >= continue_probability) {
+					return L;
+				}
+				F /= continue_probability;
+			}
+
+			// Next path segment
+			switch (shape.m_reflection_t) {
+			case Reflection_t::Specular: {
+				const Vector3 d = IdealSpecularReflect(r.m_d, n);
+				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
+				break;
+			}
+			case Reflection_t::Refractive: {
+				double pr;
+				const Vector3 d = IdealSpecularTransmit(r.m_d, n, REFRACTIVE_INDEX_OUT, REFRACTIVE_INDEX_IN, pr, rng);
+				F *= pr;
+				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
+				break;
+			}
+			default: {
+				const Vector3 w = n.Dot(r.m_d) < 0 ? n : -n;
+				const Vector3 u = ((std::abs(w.m_x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w)).Normalize();
+				const Vector3 v = w.Cross(u);
+
+				const Vector3 sample_d = CosineWeightedSampleOnHemisphere(rng.UniformFloat(), rng.UniformFloat());
+				const Vector3 d = (sample_d.m_x * u + sample_d.m_y * v + sample_d.m_z * w).Normalize();
+				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
+				break;
+			}
+			}
 		}
 	}
-	return hit;
-}
 
+	inline void Render(uint32_t nb_samples) noexcept {
+		RNG rng;
 
-bool Intersect(const Ray &ray) {
-	const size_t n = sizeof(spheres) / sizeof(Sphere);
-	for (size_t i = 0; i < n; ++i)
-		if (spheres[i].Intersect(ray))
-			return true;
-	return false;
-}
+		const uint32_t w = 1024;
+		const uint32_t h = 768;
 
+		const Vector3 eye = Vector3(50.0, 52.0, 295.6);
+		const Vector3 gaze = Vector3(0.0, -0.042612, -1.0).Normalize();
+		const double fov = 0.5135;
+		const Vector3 cx = Vector3(w * fov / h, 0.0, 0.0);
+		const Vector3 cy = (cx.Cross(gaze)).Normalize() * fov;
 
-Vector3 Radiance(const Ray &ray, RNG &rng) {
-	Ray r = ray;
-	Vector3 L;
-	Vector3 F(1.0);
+		Vector3 * const Ls = new Vector3[w * h];
 
-	while (true) {
-		size_t id;
-		if (!Intersect(r, id))
-			return L;
-
-		const Sphere &shape = spheres[id];
-		const Vector3 p = r(r.tmax);
-		const Vector3 n = (p - shape.p).Normalize();
-
-		L += F * shape.e;
-		F *= shape.f;
-		
-		// Russian roulette
-		if (r.depth > 4) {
-			const double continue_probability = shape.f.Max();
-			if (rng.UniformFloat() >= continue_probability)
-				return L;
-			F /= continue_probability;
+		for (size_t y = 0; y < h; ++y) { // pixel row
+			
+			fprintf(stderr, "\rRendering (%u spp) %5.2f%%", nb_samples * 4, 100.0 * y / (h - 1));
+			
+			for (size_t x = 0; x < w; ++x) { // pixel column
+				
+				for (size_t sy = 0, i = (h - 1 - y) * w + x; sy < 2; ++sy) { // 2 subpixel row
+					
+					for (size_t sx = 0; sx < 2; ++sx) { // 2 subpixel column
+						
+						Vector3 L;
+						
+						for (size_t s = 0; s < nb_samples; ++s) { // samples per subpixel
+							
+							const double u1 = 2.0 * rng.UniformFloat();
+							const double u2 = 2.0 * rng.UniformFloat();
+							const double dx = u1 < 1.0 ? sqrt(u1) - 1.0 : 1.0 - sqrt(2.0 - u1);
+							const double dy = u2 < 1.0 ? sqrt(u2) - 1.0 : 1.0 - sqrt(2.0 - u2);
+							Vector3 d = cx * (((sx + 0.5 + dx) * 0.5 + x) / w - 0.5) +
+										cy * (((sy + 0.5 + dy) * 0.5 + y) / h - 0.5) + gaze;
+							
+							L += Radiance(Ray(eye + d * 140.0, d.Normalize(), EPSILON_SPHERE), rng) * (1.0 / nb_samples);
+						}
+						Ls[i] += 0.25 * Clamp(L);
+					}
+				}
+			}
 		}
 
-		// Next path segment
-		switch (shape.reflection_t) {	
-		case SPECULAR: {
-			const Vector3 d = IdealSpecularReflect(r.d, n);
-			r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.depth + 1);
-			break;
-		}	
-		case REFRACTIVE: {
-			double pr;
-			const Vector3 d = IdealSpecularTransmit(r.d, n, REFRACTIVE_INDEX_OUT, REFRACTIVE_INDEX_IN, pr, rng);
-			F *= pr;
-			r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.depth + 1);
-			break;
-		}
-		default: {
-			const Vector3 w = n.Dot(r.d) < 0 ? n : -n;
-			const Vector3 u = ((std::abs(w.x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w)).Normalize();
-			const Vector3 v = w.Cross(u);
+		WritePPM(w, h, Ls);
 
-			const Vector3 sample_d = CosineWeightedSampleOnHemisphere(rng.UniformFloat(), rng.UniformFloat());
-			const Vector3 d = (sample_d.x * u + sample_d.y * v + sample_d.z * w).Normalize();
-			r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.depth + 1);
-		}
-		}
+		delete[] Ls;
 	}
 }
 
 int main(int argc, char *argv[]) {
-	RNG rng;
-	const int nb_samples = (argc == 2) ? atoi(argv[1]) / 4 : 1;
+	const uint32_t nb_samples = (argc == 2) ? atoi(argv[1]) / 4 : 1;
+	smallpt::Render(nb_samples);
 
-	const int w = 1024;
-	const int h = 768;
-	
-	const Vector3 eye = Vector3(50, 52, 295.6);
-	const Vector3 gaze = Vector3(0, -0.042612, -1).Normalize();
-	const double fov = 0.5135;
-	const Vector3 cx = Vector3(w * fov / h, 0.0, 0.0);
-	const Vector3 cy = (cx.Cross(gaze)).Normalize() * fov;
-
-	Vector3 *Ls = new Vector3[w * h];
-
-	for (int y = 0; y < h; ++y) { // pixel row
-		fprintf(stderr, "\rRendering (%d spp) %5.2f%%", nb_samples * 4, 100.0 * y / (h - 1));
-		for (int x = 0; x < w; ++x) // pixel column
-			for (int sy = 0, i = (h - 1 - y) * w + x; sy < 2; ++sy) // 2 subpixel row
-				for (int sx = 0; sx < 2; ++sx) { // 2 subpixel column
-					Vector3 L;
-					for (int s = 0; s < nb_samples; s++) { // samples per subpixel
-						const double u1 = 2.0 * rng.UniformFloat();
-						const double u2 = 2.0 * rng.UniformFloat();
-						const double dx = u1 < 1 ? sqrt(u1) - 1.0 : 1.0 - sqrt(2.0 - u1);
-						const double dy = u2 < 1 ? sqrt(u2) - 1.0 : 1.0 - sqrt(2.0 - u2);
-						Vector3 d		= cx * (((sx + 0.5 + dx) / 2 + x) / w - 0.5) +
-										  cy * (((sy + 0.5 + dy) / 2 + y) / h - 0.5) + gaze;
-						L += Radiance(Ray(eye + d * 140, d.Normalize(), EPSILON_SPHERE), rng) * (1.0 / nb_samples);
-					}
-					Ls[i] += 0.25 * Clamp(L);
-				}
-	}
-	
-	WritePPM(w, h, Ls);
-
-	delete[] Ls;
+	return 0;
 }

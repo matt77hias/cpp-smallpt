@@ -1,220 +1,225 @@
 #pragma once
 
-struct Vector3 {
+#include <algorithm>
+#include <iostream>
 
-	Vector3(double a = 0) : x(a), y(a), z(a) {}
-	Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
-	Vector3(const Vector3 &v) : x(v.x), y(v.y), z(v.z) {}
-	
-	inline bool HasNaNs() const {
-		return isnan(x) || isnan(y) || isnan(z);
-	}
+#include "math_tools.hpp"
 
-	inline Vector3 &operator=(const Vector3 &v) {
-		x = v.x;
-		y = v.y;
-		z = v.z;
-		return *this;
-	}
+namespace smallpt {
 
-	inline Vector3 operator-() const { 
-		return Vector3(-x, -y, -z); 
-	}
-	inline Vector3 operator+(const Vector3 &v) const {
-		return Vector3(x + v.x, y + v.y, z + v.z);
-	}
-	inline Vector3 operator-(const Vector3 &v) const {
-		return Vector3(x - v.x, y - v.y, z - v.z);
-	}
-	inline Vector3 operator*(const Vector3 &v) const {
-		return Vector3(x * v.x, y * v.y, z * v.z);
-	}
-	inline Vector3 operator/(const Vector3 &v) const {
-		return Vector3(x / v.x, y / v.y, z / v.z);
-	}
-	inline Vector3 operator+(double a) const {
-		return Vector3(x + a, y + a, z + a);
-	}
-	inline Vector3 operator-(double a) const {
-		return Vector3(x - a, y - a, z - a);
-	}
-	inline Vector3 operator*(double a) const {
-		return Vector3(x * a, y * a, z * a);
-	}
-	inline Vector3 operator/(double a) const {
-		const double inv_a = 1.0 / a;
-		return Vector3(x * inv_a, y * inv_a, z * inv_a);
-	}
-	friend inline Vector3 operator+(double a, const Vector3 &v) {
-		return Vector3(v.x + a, v.y + a, v.z + a);
-	}
-	friend inline Vector3 operator-(double a, const Vector3 &v) {
-		return Vector3(v.x - a, v.y - a, v.z - a);
-	}
-	friend inline Vector3 operator*(double a, const Vector3 &v) {
-		return Vector3(v.x * a, v.y * a, v.z * a);
-	}
-	friend inline Vector3 operator/(double a, const Vector3 &v) {
-		const double inv_a = 1.0 / a;
-		return Vector3(v.x * inv_a, v.y * inv_a, v.z * inv_a);
-	}
+	struct Vector3 final {
 
-	inline Vector3 &operator+=(const Vector3 &v) {
-		x += v.x;
-		y += v.y;
-		z += v.z;
-		return *this;
-	}
-	inline Vector3 &operator-=(const Vector3 &v) {
-		x -= v.x;
-		y -= v.y;
-		z -= v.z;
-		return *this;
-	}
-	inline Vector3 &operator*=(const Vector3 &v) {
-		x *= v.x;
-		y *= v.y;
-		z *= v.z;
-		return *this;
-	}
-	inline Vector3 &operator/=(const Vector3 &v) {
-		x /= v.x;
-		y /= v.y;
-		z /= v.z;
-		return *this;
-	}
-	inline Vector3 &operator+=(double a) {
-		x += a;
-		y += a;
-		z += a;
-		return *this;
-	}
-	inline Vector3 &operator-=(double a) {
-		x -= a;
-		y -= a;
-		z -= a;
-		return *this;
-	}
-	inline Vector3 &operator*=(double a) {
-		x *= a;
-		y *= a;
-		z *= a;
-		return *this;
-	}
-	inline Vector3 &operator/=(double a) {
-		const double inv_a = 1.0 / a;
-		x *= inv_a;
-		y *= inv_a;
-		z *= inv_a;
-		return *this;
-	}
+	public:
 
-	inline double Dot(const Vector3 &v) const { 
-		return x * v.x + y * v.y + z * v.z; 
-	}
-	inline Vector3 Cross(const Vector3 &v) const { 
-		return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); 
-	}
+		constexpr explicit Vector3(double a = 0.0)
+			: Vector3(a, a, a) {}
+		constexpr Vector3(double x, double y, double z)
+			: m_x(x), m_y(y), m_z(z) {}
+		constexpr Vector3(const Vector3 &v) = default;
+		constexpr Vector3(Vector3 &&v) = default;
+		~Vector3() = default;
 
-	inline bool operator==(const Vector3 &v) const {
-		return x == v.x && y == v.y && z == v.z;
-	}
-	inline bool operator!=(const Vector3 &v) const {
-		return x != v.x || y != v.y || z != v.z;
-	}
-	inline bool operator<(const Vector3 &v) const {
-		return x < v.x && y < v.y && z < v.z;
-	}
-	inline bool operator<=(const Vector3 &v) const {
-		return x <= v.x && y <= v.y && z <= v.z;
-	}
-	inline bool operator>(const Vector3 &v) const {
-		return x > v.x && y > v.y && z > v.z;
-	}
-	inline bool operator>=(const Vector3 &v) const {
-		return x >= v.x && y >= v.y && z >= v.z;
-	}
+		constexpr Vector3 &operator=(const Vector3 &v) = default;
+		constexpr Vector3 &operator=(Vector3 &&v) = default;
 
-	friend inline Vector3 Sqrt(const Vector3 &v) {
-		return Vector3(sqrt(v.x), sqrt(v.y), sqrt(v.z));
-	}
-	friend inline Vector3 Pow(const Vector3 &v, double a) {
-		return Vector3(pow(v.x, a), pow(v.y, a), pow(v.z, a));
-	}
-	friend inline Vector3 Abs(const Vector3 &v) {
-		return Vector3(abs(v.x), abs(v.y), abs(v.z));
-	}
-	friend inline Vector3 Min(const Vector3 &v1, const Vector3 &v2) {
-		return Vector3(std::min(v1.x, v2.x), std::min(v1.y, v2.y), std::min(v1.z, v2.z));
-	}
-	friend inline Vector3 Max(const Vector3 &v1, const Vector3 &v2) {
-		return Vector3(std::max(v1.x, v2.x), std::max(v1.y, v2.y), std::max(v1.z, v2.z));
-	}
-	friend inline Vector3 Round(const Vector3 &v) {
-		return Vector3(std::round(v.x), std::round(v.y), std::round(v.z));
-	}
-	friend inline Vector3 Floor(const Vector3 &v) {
-		return Vector3(std::floor(v.x), std::floor(v.y), std::floor(v.z));
-	}
-	friend inline Vector3 Ceil(const Vector3 &v) {
-		return Vector3(std::ceil(v.x), std::ceil(v.y), std::ceil(v.z));
-	}
-	friend inline Vector3 Trunc(const Vector3 &v) {
-		return Vector3(std::trunc(v.x), std::trunc(v.y), std::trunc(v.z));
-	}
-	friend inline Vector3 Clamp(const Vector3 &v, double low = 0, double high = 1) {
-		return Vector3(Clamp(v.x, low, high), Clamp(v.y, low, high), Clamp(v.z, low, high));
-	}
-	friend inline Vector3 Lerp(double a, const Vector3 &v1, const Vector3 &v2) {
-		return v1 + a * (v2 - v1);
-	}
-	friend inline Vector3 Permute(const Vector3 &v, int x, int y, int z) {
-		return Vector3(v[x], v[y], v[z]);
-	}
+		bool HasNaNs() const noexcept {
+			return isnan(m_x) || isnan(m_y) || isnan(m_z);
+		}
 
-	inline double operator[](size_t i) const {
-		return raw[i];
-	}
-	inline double &operator[](size_t i) {
-		return raw[i];
-	}
+		constexpr Vector3 operator-() const noexcept {
+			return Vector3(-m_x, -m_y, -m_z);
+		}
+		constexpr Vector3 operator+(const Vector3 &v) const noexcept {
+			return Vector3(m_x + v.m_x, m_y + v.m_y, m_z + v.m_z);
+		}
+		constexpr Vector3 operator-(const Vector3 &v) const noexcept {
+			return Vector3(m_x - v.m_x, m_y - v.m_y, m_z - v.m_z);
+		}
+		constexpr Vector3 operator*(const Vector3 &v) const noexcept {
+			return Vector3(m_x * v.m_x, m_y * v.m_y, m_z * v.m_z);
+		}
+		constexpr Vector3 operator/(const Vector3 &v) const noexcept {
+			return Vector3(m_x / v.m_x, m_y / v.m_y, m_z / v.m_z);
+		}
+		constexpr Vector3 operator+(double a) const noexcept {
+			return Vector3(m_x + a, m_y + a, m_z + a);
+		}
+		constexpr Vector3 operator-(double a) const noexcept {
+			return Vector3(m_x - a, m_y - a, m_z - a);
+		}
+		constexpr Vector3 operator*(double a) const noexcept {
+			return Vector3(m_x * a, m_y * a, m_z * a);
+		}
+		constexpr Vector3 operator/(double a) const noexcept {
+			const double inv_a = 1.0 / a;
+			return Vector3(m_x * inv_a, m_y * inv_a, m_z * inv_a);
+		}
+		friend constexpr Vector3 operator+(double a, const Vector3 &v) noexcept {
+			return Vector3(v.m_x + a, v.m_y + a, v.m_z + a);
+		}
+		friend constexpr Vector3 operator-(double a, const Vector3 &v) noexcept {
+			return Vector3(v.m_x - a, v.m_y - a, v.m_z - a);
+		}
+		friend constexpr Vector3 operator*(double a, const Vector3 &v) noexcept {
+			return Vector3(v.m_x * a, v.m_y * a, v.m_z * a);
+		}
+		friend constexpr Vector3 operator/(double a, const Vector3 &v) noexcept {
+			const double inv_a = 1.0 / a;
+			return Vector3(v.m_x * inv_a, v.m_y * inv_a, v.m_z * inv_a);
+		}
 
-	inline int MinDimension() const {
-		return (x < y && x < z) ? 0 : ((y < z) ? 1 : 2);
-	}
-	inline int MaxDimension() const {
-		return (x > y && x > z) ? 0 : ((y > z) ? 1 : 2);
-	}
-	inline double Min() const {
-		return (x < y && x < z) ? x : ((y < z) ? y : z);
-	}
-	inline double Max() const {
-		return (x > y && x > z) ? x : ((y > z) ? y : z);
-	}
+		constexpr Vector3 &operator+=(const Vector3 &v) noexcept {
+			m_x += v.m_x;
+			m_y += v.m_y;
+			m_z += v.m_z;
+			return *this;
+		}
+		constexpr Vector3 &operator-=(const Vector3 &v) noexcept {
+			m_x -= v.m_x;
+			m_y -= v.m_y;
+			m_z -= v.m_z;
+			return *this;
+		}
+		constexpr Vector3 &operator*=(const Vector3 &v) noexcept {
+			m_x *= v.m_x;
+			m_y *= v.m_y;
+			m_z *= v.m_z;
+			return *this;
+		}
+		constexpr Vector3 &operator/=(const Vector3 &v) noexcept {
+			m_x /= v.m_x;
+			m_y /= v.m_y;
+			m_z /= v.m_z;
+			return *this;
+		}
+		constexpr Vector3 &operator+=(double a) noexcept {
+			m_x += a;
+			m_y += a;
+			m_z += a;
+			return *this;
+		}
+		constexpr Vector3 &operator-=(double a) noexcept {
+			m_x -= a;
+			m_y -= a;
+			m_z -= a;
+			return *this;
+		}
+		constexpr Vector3 &operator*=(double a) noexcept {
+			m_x *= a;
+			m_y *= a;
+			m_z *= a;
+			return *this;
+		}
+		constexpr Vector3 &operator/=(double a) noexcept {
+			const double inv_a = 1.0 / a;
+			m_x *= inv_a;
+			m_y *= inv_a;
+			m_z *= inv_a;
+			return *this;
+		}
 
-	inline double Norm2_squared() const { 
-		return x * x + y * y + z * z; 
-	}
-	inline double Norm2() const { 
-		return sqrt(Norm2_squared());
-	}
-	inline Vector3 &Normalize() { 
-		const double a = 1 / Norm2();
-		x *= a;
-		y *= a;
-		z *= a;
-		return *this; 
-	}
+		constexpr double Dot(const Vector3 &v) const noexcept {
+			return m_x * v.m_x + m_y * v.m_y + m_z * v.m_z;
+		}
+		constexpr Vector3 Cross(const Vector3 &v) const noexcept {
+			return Vector3(m_y * v.m_z - m_z * v.m_y, m_z * v.m_x - m_x * v.m_z, m_x * v.m_y - m_y * v.m_x);
+		}
 
-	friend inline std::ostream &operator<<(std::ostream& os, const Vector3 &v) {
-		os << '[' << v.x << ' ' << v.y << ' ' << v.z << ']';
-		return os;
-	}
+		constexpr bool operator==(const Vector3 &v) const {
+			return m_x == v.m_x && m_y == v.m_y && m_z == v.m_z;
+		}
+		constexpr bool operator!=(const Vector3 &v) const {
+			return m_x != v.m_x || m_y != v.m_y || m_z != v.m_z;
+		}
+		constexpr bool operator<(const Vector3 &v) const {
+			return m_x < v.m_x && m_y < v.m_y && m_z < v.m_z;
+		}
+		constexpr bool operator<=(const Vector3 &v) const {
+			return m_x <= v.m_x && m_y <= v.m_y && m_z <= v.m_z;
+		}
+		constexpr bool operator>(const Vector3 &v) const {
+			return m_x > v.m_x && m_y > v.m_y && m_z > v.m_z;
+		}
+		constexpr bool operator>=(const Vector3 &v) const {
+			return m_x >= v.m_x && m_y >= v.m_y && m_z >= v.m_z;
+		}
 
-	union {
-		struct {
-			double x, y, z;
-		};
-		double raw[3];
+		friend Vector3 Sqrt(const Vector3 &v) noexcept {
+			return Vector3(sqrt(v.m_x), sqrt(v.m_y), sqrt(v.m_z));
+		}
+		friend Vector3 Pow(const Vector3 &v, double a) noexcept {
+			return Vector3(pow(v.m_x, a), pow(v.m_y, a), pow(v.m_z, a));
+		}
+		friend Vector3 Abs(const Vector3 &v) noexcept {
+			return Vector3(abs(v.m_x), abs(v.m_y), abs(v.m_z));
+		}
+		friend Vector3 Min(const Vector3 &v1, const Vector3 &v2) noexcept {
+			return Vector3(std::min(v1.m_x, v2.m_x), std::min(v1.m_y, v2.m_y), std::min(v1.m_z, v2.m_z));
+		}
+		friend Vector3 Max(const Vector3 &v1, const Vector3 &v2) noexcept {
+			return Vector3(std::max(v1.m_x, v2.m_x), std::max(v1.m_y, v2.m_y), std::max(v1.m_z, v2.m_z));
+		}
+		friend Vector3 Round(const Vector3 &v) noexcept {
+			return Vector3(std::round(v.m_x), std::round(v.m_y), std::round(v.m_z));
+		}
+		friend Vector3 Floor(const Vector3 &v) noexcept {
+			return Vector3(std::floor(v.m_x), std::floor(v.m_y), std::floor(v.m_z));
+		}
+		friend Vector3 Ceil(const Vector3 &v) noexcept {
+			return Vector3(std::ceil(v.m_x), std::ceil(v.m_y), std::ceil(v.m_z));
+		}
+		friend Vector3 Trunc(const Vector3 &v) noexcept {
+			return Vector3(std::trunc(v.m_x), std::trunc(v.m_y), std::trunc(v.m_z));
+		}
+		friend constexpr Vector3 Clamp(const Vector3 &v, double low = 0.0, double high = 1.0) noexcept {
+			return Vector3(Clamp(v.m_x, low, high), Clamp(v.m_y, low, high), Clamp(v.m_z, low, high));
+		}
+		friend constexpr Vector3 Lerp(double a, const Vector3 &v1, const Vector3 &v2) noexcept {
+			return v1 + a * (v2 - v1);
+		}
+		friend constexpr Vector3 Permute(const Vector3 &v, size_t x, size_t y, size_t z) noexcept {
+			return Vector3(v[x], v[y], v[z]);
+		}
+
+		constexpr double operator[](size_t i) const noexcept {
+			return (&m_x)[i];
+		}
+		constexpr double &operator[](size_t i) noexcept {
+			return (&m_x)[i];
+		}
+
+		constexpr size_t MinDimension() const noexcept {
+			return (m_x < m_y && m_x < m_z) ? 0 : ((m_y < m_z) ? 1 : 2);
+		}
+		constexpr size_t MaxDimension() const noexcept {
+			return (m_x > m_y && m_x > m_z) ? 0 : ((m_y > m_z) ? 1 : 2);
+		}
+		constexpr double Min() const noexcept {
+			return (m_x < m_y && m_x < m_z) ? m_x : ((m_y < m_z) ? m_y : m_z);
+		}
+		constexpr double Max() const noexcept {
+			return (m_x > m_y && m_x > m_z) ? m_x : ((m_y > m_z) ? m_y : m_z);
+		}
+
+		constexpr double Norm2_squared() const noexcept {
+			return m_x * m_x + m_y * m_y + m_z * m_z;
+		}
+		double Norm2() const noexcept {
+			return sqrt(Norm2_squared());
+		}
+		Vector3 &Normalize() noexcept {
+			const double a = 1 / Norm2();
+			m_x *= a;
+			m_y *= a;
+			m_z *= a;
+			return *this;
+		}
+
+		friend std::ostream &operator<<(std::ostream& os, const Vector3 &v) {
+			os << '[' << v.m_x << ' ' << v.m_y << ' ' << v.m_z << ']';
+			return os;
+		}
+
+		double m_x, m_y, m_z;
 	};
-};
+}
