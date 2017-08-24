@@ -61,7 +61,7 @@ namespace smallpt {
 		}
 
 		if (threads) {
-			WaitForMultipleObjects(nb_threads, threads, TRUE, INFINITE);
+			WaitForMultipleObjects(static_cast< DWORD >(nb_threads), threads, TRUE, INFINITE);
 
 			for (size_t i = 0; i < nb_threads; ++i) {
 				CloseHandle(threads[i]);
