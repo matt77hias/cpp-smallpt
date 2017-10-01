@@ -55,17 +55,16 @@ namespace smallpt {
 			return Vector3(m_x * inv_a, m_y * inv_a, m_z * inv_a);
 		}
 		friend constexpr Vector3 operator+(double a, const Vector3 &v) noexcept {
-			return Vector3(v.m_x + a, v.m_y + a, v.m_z + a);
+			return Vector3(a + v.m_x, a + v.m_y, a + v.m_z);
 		}
 		friend constexpr Vector3 operator-(double a, const Vector3 &v) noexcept {
-			return Vector3(v.m_x - a, v.m_y - a, v.m_z - a);
+			return Vector3(a - v.m_x, a - v.m_y, a - v.m_z);
 		}
 		friend constexpr Vector3 operator*(double a, const Vector3 &v) noexcept {
-			return Vector3(v.m_x * a, v.m_y * a, v.m_z * a);
+			return Vector3(a * v.m_x, a * v.m_y, a * v.m_z);
 		}
 		friend constexpr Vector3 operator/(double a, const Vector3 &v) noexcept {
-			const double inv_a = 1.0 / a;
-			return Vector3(v.m_x * inv_a, v.m_y * inv_a, v.m_z * inv_a);
+			return Vector3(a / v.m_x, a / v.m_y, a / v.m_z);
 		}
 
 		constexpr Vector3 &operator+=(const Vector3 &v) noexcept {
