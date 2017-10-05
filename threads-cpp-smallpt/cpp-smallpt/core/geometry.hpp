@@ -23,7 +23,7 @@ namespace smallpt {
 		constexpr Ray &operator=(const Ray &ray) = default;
 		constexpr Ray &operator=(Ray &&ray) = default;
 
-		constexpr Vector3 operator()(double t) const { 
+		constexpr const Vector3 operator()(double t) const { 
 			return m_o + m_d * t; 
 		}
 

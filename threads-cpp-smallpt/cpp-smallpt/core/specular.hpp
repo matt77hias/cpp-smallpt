@@ -15,11 +15,13 @@ namespace smallpt {
 		return R0 + (1.0 - R0) * c * c * c * c * c;
 	}
 
-	inline constexpr Vector3 IdealSpecularReflect(const Vector3 &d, const Vector3 &n) {
+	inline constexpr const Vector3 IdealSpecularReflect(const Vector3 &d, const Vector3 &n) {
 		return d - 2.0 * n.Dot(d) * n;
 	}
 
-	inline Vector3 IdealSpecularTransmit(const Vector3 &d, const Vector3 &n, double n_out, double n_in, double &pr, RNG &rng) {
+	inline const Vector3 IdealSpecularTransmit(
+		const Vector3 &d, const Vector3 &n, double n_out, double n_in, double &pr, RNG &rng) {
+		
 		const Vector3 d_Re = IdealSpecularReflect(d, n);
 
 		const bool out_to_in = n.Dot(d) < 0.0;
@@ -34,7 +36,7 @@ namespace smallpt {
 			return d_Re;
 		}
 
-		const Vector3 d_Tr = (nn * d - nl * (nn * cos_theta + sqrt(cos2_phi))).Normalize();
+		const Vector3 d_Tr = Normalize(nn * d - nl * (nn * cos_theta + sqrt(cos2_phi)));
 		const double c = 1.0 - (out_to_in ? -cos_theta : d_Tr.Dot(n));
 
 		const double Re = SchlickReflectance(n_out, n_in, c);

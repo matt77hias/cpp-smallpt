@@ -41,7 +41,7 @@ namespace smallpt {
 		return false;
 	}
 
-	static Vector3 Radiance(const Ray &ray, RNG &rng) noexcept {
+	static const Vector3 Radiance(const Ray &ray, RNG &rng) noexcept {
 		Ray r = ray;
 		Vector3 L;
 		Vector3 F(1.0);
@@ -54,7 +54,7 @@ namespace smallpt {
 
 			const Sphere &shape = g_spheres[id];
 			const Vector3 p = r(r.m_tmax);
-			const Vector3 n = (p - shape.m_p).Normalize();
+			const Vector3 n = Normalize(p - shape.m_p);
 
 			L += F * shape.m_e;
 			F *= shape.m_f;
@@ -84,11 +84,11 @@ namespace smallpt {
 			}
 			default: {
 				const Vector3 w = n.Dot(r.m_d) < 0 ? n : -n;
-				const Vector3 u = ((std::abs(w.m_x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w)).Normalize();
+				const Vector3 u = Normalize((std::abs(w.m_x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w));
 				const Vector3 v = w.Cross(u);
 
 				const Vector3 sample_d = CosineWeightedSampleOnHemisphere(rng.UniformFloat(), rng.UniformFloat());
-				const Vector3 d = (sample_d.m_x * u + sample_d.m_y * v + sample_d.m_z * w).Normalize();
+				const Vector3 d = Normalize(sample_d.m_x * u + sample_d.m_y * v + sample_d.m_z * w);
 				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
 				break;
 			}
@@ -103,10 +103,10 @@ namespace smallpt {
 		const uint32_t h = 768;
 
 		const Vector3 eye = Vector3(50.0, 52.0, 295.6);
-		const Vector3 gaze = Vector3(0.0, -0.042612, -1.0).Normalize();
+		const Vector3 gaze = Normalize(Vector3(0.0, -0.042612, -1.0));
 		const double fov = 0.5135;
 		const Vector3 cx = Vector3(w * fov / h, 0.0, 0.0);
-		const Vector3 cy = (cx.Cross(gaze)).Normalize() * fov;
+		const Vector3 cy = Normalize(cx.Cross(gaze)) * fov;
 
 		Vector3 * const Ls = new Vector3[w * h];
 
@@ -127,10 +127,10 @@ namespace smallpt {
 							const double u2 = 2.0 * rng.UniformFloat();
 							const double dx = u1 < 1.0 ? sqrt(u1) - 1.0 : 1.0 - sqrt(2.0 - u1);
 							const double dy = u2 < 1.0 ? sqrt(u2) - 1.0 : 1.0 - sqrt(2.0 - u2);
-							Vector3 d = cx * (((sx + 0.5 + dx) * 0.5 + x) / w - 0.5) +
-										cy * (((sy + 0.5 + dy) * 0.5 + y) / h - 0.5) + gaze;
+							const Vector3 d = cx * (((sx + 0.5 + dx) * 0.5 + x) / w - 0.5) + 
+								              cy * (((sy + 0.5 + dy) * 0.5 + y) / h - 0.5) + gaze;
 							
-							L += Radiance(Ray(eye + d * 140.0, d.Normalize(), EPSILON_SPHERE), rng) * (1.0 / nb_samples);
+							L += Radiance(Ray(eye + d * 140.0, Normalize(d), EPSILON_SPHERE), rng) * (1.0 / nb_samples);
 						}
 						Ls[i] += 0.25 * Clamp(L);
 					}

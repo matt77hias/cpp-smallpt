@@ -26,44 +26,44 @@ namespace smallpt {
 			return isnan(m_x) || isnan(m_y) || isnan(m_z);
 		}
 
-		constexpr Vector3 operator-() const noexcept {
+		constexpr const Vector3 operator-() const noexcept {
 			return Vector3(-m_x, -m_y, -m_z);
 		}
-		constexpr Vector3 operator+(const Vector3 &v) const noexcept {
+		constexpr const Vector3 operator+(const Vector3 &v) const noexcept {
 			return Vector3(m_x + v.m_x, m_y + v.m_y, m_z + v.m_z);
 		}
-		constexpr Vector3 operator-(const Vector3 &v) const noexcept {
+		constexpr const Vector3 operator-(const Vector3 &v) const noexcept {
 			return Vector3(m_x - v.m_x, m_y - v.m_y, m_z - v.m_z);
 		}
-		constexpr Vector3 operator*(const Vector3 &v) const noexcept {
+		constexpr const Vector3 operator*(const Vector3 &v) const noexcept {
 			return Vector3(m_x * v.m_x, m_y * v.m_y, m_z * v.m_z);
 		}
-		constexpr Vector3 operator/(const Vector3 &v) const noexcept {
+		constexpr const Vector3 operator/(const Vector3 &v) const noexcept {
 			return Vector3(m_x / v.m_x, m_y / v.m_y, m_z / v.m_z);
 		}
-		constexpr Vector3 operator+(double a) const noexcept {
+		constexpr const Vector3 operator+(double a) const noexcept {
 			return Vector3(m_x + a, m_y + a, m_z + a);
 		}
-		constexpr Vector3 operator-(double a) const noexcept {
+		constexpr const Vector3 operator-(double a) const noexcept {
 			return Vector3(m_x - a, m_y - a, m_z - a);
 		}
-		constexpr Vector3 operator*(double a) const noexcept {
+		constexpr const Vector3 operator*(double a) const noexcept {
 			return Vector3(m_x * a, m_y * a, m_z * a);
 		}
-		constexpr Vector3 operator/(double a) const noexcept {
+		constexpr const Vector3 operator/(double a) const noexcept {
 			const double inv_a = 1.0 / a;
 			return Vector3(m_x * inv_a, m_y * inv_a, m_z * inv_a);
 		}
-		friend constexpr Vector3 operator+(double a, const Vector3 &v) noexcept {
+		friend constexpr const Vector3 operator+(double a, const Vector3 &v) noexcept {
 			return Vector3(a + v.m_x, a + v.m_y, a + v.m_z);
 		}
-		friend constexpr Vector3 operator-(double a, const Vector3 &v) noexcept {
+		friend constexpr const Vector3 operator-(double a, const Vector3 &v) noexcept {
 			return Vector3(a - v.m_x, a - v.m_y, a - v.m_z);
 		}
-		friend constexpr Vector3 operator*(double a, const Vector3 &v) noexcept {
+		friend constexpr const Vector3 operator*(double a, const Vector3 &v) noexcept {
 			return Vector3(a * v.m_x, a * v.m_y, a * v.m_z);
 		}
-		friend constexpr Vector3 operator/(double a, const Vector3 &v) noexcept {
+		friend constexpr const Vector3 operator/(double a, const Vector3 &v) noexcept {
 			return Vector3(a / v.m_x, a / v.m_y, a / v.m_z);
 		}
 
@@ -120,7 +120,7 @@ namespace smallpt {
 		constexpr double Dot(const Vector3 &v) const noexcept {
 			return m_x * v.m_x + m_y * v.m_y + m_z * v.m_z;
 		}
-		constexpr Vector3 Cross(const Vector3 &v) const noexcept {
+		constexpr const Vector3 Cross(const Vector3 &v) const noexcept {
 			return Vector3(m_y * v.m_z - m_z * v.m_y, m_z * v.m_x - m_x * v.m_z, m_x * v.m_y - m_y * v.m_x);
 		}
 
@@ -143,40 +143,40 @@ namespace smallpt {
 			return m_x >= v.m_x && m_y >= v.m_y && m_z >= v.m_z;
 		}
 
-		friend Vector3 Sqrt(const Vector3 &v) noexcept {
+		friend const Vector3 Sqrt(const Vector3 &v) noexcept {
 			return Vector3(sqrt(v.m_x), sqrt(v.m_y), sqrt(v.m_z));
 		}
-		friend Vector3 Pow(const Vector3 &v, double a) noexcept {
+		friend const Vector3 Pow(const Vector3 &v, double a) noexcept {
 			return Vector3(pow(v.m_x, a), pow(v.m_y, a), pow(v.m_z, a));
 		}
-		friend Vector3 Abs(const Vector3 &v) noexcept {
+		friend const Vector3 Abs(const Vector3 &v) noexcept {
 			return Vector3(abs(v.m_x), abs(v.m_y), abs(v.m_z));
 		}
-		friend Vector3 Min(const Vector3 &v1, const Vector3 &v2) noexcept {
+		friend const Vector3 Min(const Vector3 &v1, const Vector3 &v2) noexcept {
 			return Vector3(std::min(v1.m_x, v2.m_x), std::min(v1.m_y, v2.m_y), std::min(v1.m_z, v2.m_z));
 		}
-		friend Vector3 Max(const Vector3 &v1, const Vector3 &v2) noexcept {
+		friend const Vector3 Max(const Vector3 &v1, const Vector3 &v2) noexcept {
 			return Vector3(std::max(v1.m_x, v2.m_x), std::max(v1.m_y, v2.m_y), std::max(v1.m_z, v2.m_z));
 		}
-		friend Vector3 Round(const Vector3 &v) noexcept {
+		friend const Vector3 Round(const Vector3 &v) noexcept {
 			return Vector3(std::round(v.m_x), std::round(v.m_y), std::round(v.m_z));
 		}
-		friend Vector3 Floor(const Vector3 &v) noexcept {
+		friend const Vector3 Floor(const Vector3 &v) noexcept {
 			return Vector3(std::floor(v.m_x), std::floor(v.m_y), std::floor(v.m_z));
 		}
-		friend Vector3 Ceil(const Vector3 &v) noexcept {
+		friend const Vector3 Ceil(const Vector3 &v) noexcept {
 			return Vector3(std::ceil(v.m_x), std::ceil(v.m_y), std::ceil(v.m_z));
 		}
-		friend Vector3 Trunc(const Vector3 &v) noexcept {
+		friend const Vector3 Trunc(const Vector3 &v) noexcept {
 			return Vector3(std::trunc(v.m_x), std::trunc(v.m_y), std::trunc(v.m_z));
 		}
-		friend constexpr Vector3 Clamp(const Vector3 &v, double low = 0.0, double high = 1.0) noexcept {
+		friend constexpr const Vector3 Clamp(const Vector3 &v, double low = 0.0, double high = 1.0) noexcept {
 			return Vector3(Clamp(v.m_x, low, high), Clamp(v.m_y, low, high), Clamp(v.m_z, low, high));
 		}
-		friend constexpr Vector3 Lerp(double a, const Vector3 &v1, const Vector3 &v2) noexcept {
+		friend constexpr const Vector3 Lerp(double a, const Vector3 &v1, const Vector3 &v2) noexcept {
 			return v1 + a * (v2 - v1);
 		}
-		friend constexpr Vector3 Permute(const Vector3 &v, size_t x, size_t y, size_t z) noexcept {
+		friend constexpr const Vector3 Permute(const Vector3 &v, size_t x, size_t y, size_t z) noexcept {
 			return Vector3(v[x], v[y], v[z]);
 		}
 
@@ -206,12 +206,11 @@ namespace smallpt {
 		double Norm2() const noexcept {
 			return sqrt(Norm2_squared());
 		}
-		Vector3 &Normalize() noexcept {
-			const double a = 1 / Norm2();
+		void Normalize() noexcept {
+			const double a = 1.0 / Norm2();
 			m_x *= a;
 			m_y *= a;
 			m_z *= a;
-			return *this;
 		}
 
 		friend std::ostream &operator<<(std::ostream& os, const Vector3 &v) {
@@ -221,4 +220,9 @@ namespace smallpt {
 
 		double m_x, m_y, m_z;
 	};
+	
+	inline const Vector3 Normalize(const Vector3 &v) noexcept {
+		const double a = 1.0 / v.Norm2();
+		return a * v;
+	}
 }
