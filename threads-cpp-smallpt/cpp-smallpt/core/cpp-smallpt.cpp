@@ -1,8 +1,18 @@
 #include "stdafx.h"
 
-#define REFRACTIVE_INDEX_OUT 1.0
-#define REFRACTIVE_INDEX_IN 1.5
+//-----------------------------------------------------------------------------
+// Defines
+//-----------------------------------------------------------------------------
+#pragma region
 
+#define REFRACTIVE_INDEX_OUT 1.0
+#define REFRACTIVE_INDEX_IN  1.5
+
+#pragma endregion
+
+//-----------------------------------------------------------------------------
+// Declarations and Definitions
+//-----------------------------------------------------------------------------
 namespace smallpt {
 
 	constexpr Sphere g_spheres[] = {
@@ -70,11 +80,13 @@ namespace smallpt {
 
 			// Next path segment
 			switch (shape.m_reflection_t) {
+			
 			case Reflection_t::Specular: {
 				const Vector3 d = IdealSpecularReflect(r.m_d, n);
 				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
 				break;
 			}
+			
 			case Reflection_t::Refractive: {
 				double pr;
 				const Vector3 d = IdealSpecularTransmit(r.m_d, n, REFRACTIVE_INDEX_OUT, REFRACTIVE_INDEX_IN, pr, rng);
@@ -82,6 +94,7 @@ namespace smallpt {
 				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
 				break;
 			}
+			
 			default: {
 				const Vector3 w = n.Dot(r.m_d) < 0 ? n : -n;
 				const Vector3 u = Normalize((std::abs(w.m_x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w));
@@ -96,24 +109,40 @@ namespace smallpt {
 		}
 	}
 
-	class RenderTask final: public Task {
+	//-------------------------------------------------------------------------
+	// Declarations and Definitions: RenderTask
+	//-------------------------------------------------------------------------
+
+	class RenderTask final : public Task {
 
 	public:
+
+		//---------------------------------------------------------------------
+		// Constructors and Destructors
+		//---------------------------------------------------------------------
 
 		explicit RenderTask(
 			uint32_t y, uint32_t w, uint32_t h, uint32_t nb_samples,
 			const Vector3 &eye, const Vector3 &gaze, 
 			const Vector3 &cx, const Vector3 &cy, 
-			RNG &rng, Vector3 *Ls)
+			RNG &rng, Vector3 *Ls) noexcept
 			: m_y(y), m_w(w), m_h(h), m_nb_samples(nb_samples), 
 			m_eye(eye), m_gaze(gaze), m_cx(cx), m_cy(cy), 
 			m_rng(rng), m_Ls(Ls) {}
-		RenderTask(const RenderTask &task) = default;
-		RenderTask(RenderTask &&task) = default;
+		RenderTask(const RenderTask &task) noexcept = default;
+		RenderTask(RenderTask &&task) noexcept = default;
 		virtual ~RenderTask() = default;
+
+		//---------------------------------------------------------------------
+		// Assignment Operators
+		//---------------------------------------------------------------------
 
 		RenderTask &operator=(const RenderTask &task) = delete;
 		RenderTask &operator=(RenderTask &&task) = delete;
+
+		//---------------------------------------------------------------------
+		// Member Methods
+		//---------------------------------------------------------------------
 
 		virtual void Run() noexcept final override  {
 			for (size_t x = 0; x < m_w; ++x) { // pixel column
@@ -141,6 +170,10 @@ namespace smallpt {
 		}
 
 	private:
+
+		//---------------------------------------------------------------------
+		// Member Variables
+		//---------------------------------------------------------------------
 
 		const uint32_t m_y;
 		const uint32_t m_w;

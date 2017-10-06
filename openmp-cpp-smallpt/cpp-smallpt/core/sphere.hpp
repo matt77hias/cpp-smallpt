@@ -1,33 +1,70 @@
 #pragma once
 
+//-----------------------------------------------------------------------------
+// Includes
+//-----------------------------------------------------------------------------
+#pragma region
+
 #include "geometry.hpp"
 
-enum struct Reflection_t { 
-	Diffuse, 
-	Specular, 
-	Refractive
-};
+#pragma endregion
+
+//-----------------------------------------------------------------------------
+// Defines
+//-----------------------------------------------------------------------------
+#pragma region
 
 #define EPSILON_SPHERE 1e-4
 
+#pragma endregion
+
+//-----------------------------------------------------------------------------
+// Declarations and Definitions
+//-----------------------------------------------------------------------------
 namespace smallpt {
+
+	//-------------------------------------------------------------------------
+	// Declarations and Definitions: Reflection_t
+	//-------------------------------------------------------------------------
+
+	enum struct Reflection_t {
+		Diffuse,
+		Specular,
+		Refractive
+	};
+
+	//-------------------------------------------------------------------------
+	// Declarations and Definitions: Sphere
+	//-------------------------------------------------------------------------
 
 	struct Sphere final {
 
+		//---------------------------------------------------------------------
+		// Constructors and Destructors
+		//---------------------------------------------------------------------
+
 		constexpr explicit Sphere(double r, const Vector3 &p,
-			const Vector3 &e, const Vector3 &f, Reflection_t reflection_t)
+			const Vector3 &e, const Vector3 &f, Reflection_t reflection_t) noexcept
 			: m_r(r), m_p(p), m_e(e), m_f(f), m_reflection_t(reflection_t) {}
 		constexpr explicit Sphere(double r, Vector3 &&p,
-			Vector3 &&e, Vector3 &&f, Reflection_t reflection_t)
+			Vector3 &&e, Vector3 &&f, Reflection_t reflection_t) noexcept
 			: m_r(r), m_p(std::move(p)), m_e(std::move(e)), 
 			m_f(std::move(f)), m_reflection_t(reflection_t) {}
-		constexpr Sphere(const Sphere &sphere) = default;
-		constexpr Sphere(Sphere &&sphere) = default;
+		constexpr Sphere(const Sphere &sphere) noexcept = default;
+		constexpr Sphere(Sphere &&sphere) noexcept = default;
 		~Sphere() = default;
+
+		//---------------------------------------------------------------------
+		// Assignment Operators
+		//---------------------------------------------------------------------
 
 		constexpr Sphere &operator=(const Sphere &sphere) = default;
 		constexpr Sphere &operator=(Sphere &&sphere) = default;
 		
+		//---------------------------------------------------------------------
+		// Member Methods
+		//---------------------------------------------------------------------
+
 		constexpr bool Intersect(const Ray &ray) const {
 			// (o + t*d - p) . (o + t*d - p) - r*r = 0
 			// <=> (d . d) * t^2 + 2 * d . (o - p) * t + (o - p) . (o - p) - r*r = 0
@@ -66,6 +103,10 @@ namespace smallpt {
 
 			return false;
 		}
+
+		//---------------------------------------------------------------------
+		// Member Variables
+		//---------------------------------------------------------------------
 
 		double m_r;
 		Vector3 m_p; // position

@@ -1,8 +1,18 @@
 #pragma once
 
+//-----------------------------------------------------------------------------
+// Includes
+//-----------------------------------------------------------------------------
+#pragma region
+
 #include "vector.hpp"
 #include "rng.hpp"
 
+#pragma endregion
+
+//-----------------------------------------------------------------------------
+// Declarations and Definitions
+//-----------------------------------------------------------------------------
 namespace smallpt {
 
 	inline constexpr double Reflectance0(double n1, double n2) {
@@ -10,17 +20,22 @@ namespace smallpt {
 		return sqrt_R0 * sqrt_R0;
 	}
 
-	inline constexpr double SchlickReflectance(double n1, double n2, double c) {
+	inline constexpr double SchlickReflectance(
+		double n1, double n2, double c) {
+		
 		const double R0 = Reflectance0(n1, n2);
 		return R0 + (1.0 - R0) * c * c * c * c * c;
 	}
 
-	inline constexpr const Vector3 IdealSpecularReflect(const Vector3 &d, const Vector3 &n) {
+	inline constexpr const Vector3 IdealSpecularReflect(
+		const Vector3 &d, const Vector3 &n) {
+		
 		return d - 2.0 * n.Dot(d) * n;
 	}
 
 	inline const Vector3 IdealSpecularTransmit(
-		const Vector3 &d, const Vector3 &n, double n_out, double n_in, double &pr, RNG &rng) {
+		const Vector3 &d, const Vector3 &n, 
+		double n_out, double n_in, double &pr, RNG &rng) {
 		
 		const Vector3 d_Re = IdealSpecularReflect(d, n);
 

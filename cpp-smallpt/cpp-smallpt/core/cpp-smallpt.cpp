@@ -1,8 +1,18 @@
 #include "stdafx.h"
 
-#define REFRACTIVE_INDEX_OUT 1.0
-#define REFRACTIVE_INDEX_IN 1.5
+//-----------------------------------------------------------------------------
+// Defines
+//-----------------------------------------------------------------------------
+#pragma region
 
+#define REFRACTIVE_INDEX_OUT 1.0
+#define REFRACTIVE_INDEX_IN  1.5
+
+#pragma endregion
+
+//-----------------------------------------------------------------------------
+// Declarations and Definitions
+//-----------------------------------------------------------------------------
 namespace smallpt {
 
 	constexpr Sphere g_spheres[] = {
@@ -70,11 +80,13 @@ namespace smallpt {
 
 			// Next path segment
 			switch (shape.m_reflection_t) {
+			
 			case Reflection_t::Specular: {
 				const Vector3 d = IdealSpecularReflect(r.m_d, n);
 				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
 				break;
 			}
+			
 			case Reflection_t::Refractive: {
 				double pr;
 				const Vector3 d = IdealSpecularTransmit(r.m_d, n, REFRACTIVE_INDEX_OUT, REFRACTIVE_INDEX_IN, pr, rng);
@@ -82,6 +94,7 @@ namespace smallpt {
 				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
 				break;
 			}
+			
 			default: {
 				const Vector3 w = n.Dot(r.m_d) < 0 ? n : -n;
 				const Vector3 u = Normalize((std::abs(w.m_x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w));
@@ -92,6 +105,7 @@ namespace smallpt {
 				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
 				break;
 			}
+			
 			}
 		}
 	}
