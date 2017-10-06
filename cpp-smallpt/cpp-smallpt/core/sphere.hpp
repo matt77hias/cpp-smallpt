@@ -84,8 +84,9 @@ namespace smallpt {
 			const double dop = ray.m_d.Dot(op);
 			const double D = dop * dop - op.Dot(op) + m_r * m_r;
 
-			if (D < 0)
+			if (D < 0) {
 				return false;
+			}
 
 			const double sqrtD = sqrt(D);
 
