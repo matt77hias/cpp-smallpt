@@ -25,7 +25,7 @@ namespace smallpt {
 	// Declarations and Definitions: Utilities
 	//-------------------------------------------------------------------------
 
-	inline constexpr double Clamp(
+	constexpr double Clamp(
 		double x, double low = 0.0, double high = 1.0) noexcept {
 		
 		return (x < high) ? ((x > low) ? x : low) : high;
