@@ -291,7 +291,7 @@ namespace smallpt {
 			           std::trunc(v.m_z));
 	}
 	
-	inline constexpr const Vector3 Clamp(
+	constexpr const Vector3 Clamp(
 		const Vector3 &v, double low = 0.0, double high = 1.0) noexcept {
 		
 		return Vector3(Clamp(v.m_x, low, high), 
@@ -299,13 +299,13 @@ namespace smallpt {
 			           Clamp(v.m_z, low, high));
 	}
 	
-	inline constexpr const Vector3 Lerp(
+	constexpr const Vector3 Lerp(
 		double a, const Vector3 &v1, const Vector3 &v2) noexcept {
 		
 		return v1 + a * (v2 - v1);
 	}
 	
-	inline constexpr const Vector3 Permute(
+	constexpr const Vector3 Permute(
 		const Vector3 &v, size_t x, size_t y, size_t z) noexcept {
 		
 		return Vector3(v[x], v[y], v[z]);

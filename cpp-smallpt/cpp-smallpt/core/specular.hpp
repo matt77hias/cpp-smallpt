@@ -15,19 +15,19 @@
 //-----------------------------------------------------------------------------
 namespace smallpt {
 
-	inline constexpr double Reflectance0(double n1, double n2) {
+	constexpr double Reflectance0(double n1, double n2) {
 		const double sqrt_R0 = (n1 - n2) / (n1 + n2);
 		return sqrt_R0 * sqrt_R0;
 	}
 
-	inline constexpr double SchlickReflectance(
+	constexpr double SchlickReflectance(
 		double n1, double n2, double c) {
 		
 		const double R0 = Reflectance0(n1, n2);
 		return R0 + (1.0 - R0) * c * c * c * c * c;
 	}
 
-	inline constexpr const Vector3 IdealSpecularReflect(
+	constexpr const Vector3 IdealSpecularReflect(
 		const Vector3 &d, const Vector3 &n) {
 		
 		return d - 2.0 * n.Dot(d) * n;
