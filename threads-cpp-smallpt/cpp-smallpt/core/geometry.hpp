@@ -22,12 +22,9 @@ namespace smallpt {
 		// Constructors and Destructors
 		//---------------------------------------------------------------------
 
-		constexpr explicit Ray(const Vector3 &o, const Vector3 &d, 
-			double tmin = 0.0, double tmax = INFINITY, uint32_t depth = 0) noexcept
-			: m_o(o), m_d(d),
-			m_tmin(tmin), m_tmax(tmax), m_depth(depth) {};
-		constexpr explicit Ray(Vector3 &&o, Vector3 &&d,
-			double tmin = 0.0, double tmax = INFINITY, uint32_t depth = 0) noexcept
+		constexpr explicit Ray(Vector3 o, Vector3 d,
+			double tmin = 0.0, double tmax = INFINITY, 
+			uint32_t depth = 0) noexcept
 			: m_o(std::move(o)), m_d(std::move(d)),
 			m_tmin(tmin), m_tmax(tmax), m_depth(depth) {};
 		constexpr Ray(const Ray &ray) noexcept = default;

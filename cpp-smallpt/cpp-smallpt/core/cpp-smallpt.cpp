@@ -1,6 +1,15 @@
 #include "stdafx.h"
 
 //-----------------------------------------------------------------------------
+// System Includes
+//-----------------------------------------------------------------------------
+#pragma region
+
+#include <iterator>
+
+#pragma endregion
+
+//-----------------------------------------------------------------------------
 // Defines
 //-----------------------------------------------------------------------------
 #pragma region
@@ -29,8 +38,7 @@ namespace smallpt {
 
 	constexpr bool Intersect(const Ray &ray, size_t &id) noexcept {
 		bool hit = false;
-		const size_t n = sizeof(g_spheres) / sizeof(Sphere);
-		for (size_t i = 0; i < n; ++i) {
+		for (size_t i = 0; i < std::size(g_spheres); ++i) {
 			if (g_spheres[i].Intersect(ray)) {
 				hit = true;
 				id = i;
@@ -41,8 +49,7 @@ namespace smallpt {
 	}
 
 	constexpr bool Intersect(const Ray &ray) noexcept {
-		const size_t n = sizeof(g_spheres) / sizeof(Sphere);
-		for (size_t i = 0; i < n; ++i) {
+		for (size_t i = 0; i < std::size(g_spheres); ++i) {
 			if (g_spheres[i].Intersect(ray)) {
 				return true;
 			}

@@ -43,11 +43,8 @@ namespace smallpt {
 		// Constructors and Destructors
 		//---------------------------------------------------------------------
 
-		constexpr explicit Sphere(double r, const Vector3 &p,
-			const Vector3 &e, const Vector3 &f, Reflection_t reflection_t) noexcept
-			: m_r(r), m_p(p), m_e(e), m_f(f), m_reflection_t(reflection_t) {}
-		constexpr explicit Sphere(double r, Vector3 &&p,
-			Vector3 &&e, Vector3 &&f, Reflection_t reflection_t) noexcept
+		constexpr explicit Sphere(double r, Vector3 p, Vector3 e, Vector3 f, 
+			Reflection_t reflection_t) noexcept
 			: m_r(r), m_p(std::move(p)), m_e(std::move(e)), 
 			m_f(std::move(f)), m_reflection_t(reflection_t) {}
 		constexpr Sphere(const Sphere &sphere) noexcept = default;
