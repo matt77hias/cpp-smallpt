@@ -48,8 +48,8 @@ namespace smallpt {
 		// Assignment Operators
 		//---------------------------------------------------------------------
 
-		constexpr Vector3 &operator=(const Vector3 &v) = default;
-		constexpr Vector3 &operator=(Vector3 &&v) = default;
+		Vector3 &operator=(const Vector3 &v) = default;
+		Vector3 &operator=(Vector3 &&v) = default;
 
 		//---------------------------------------------------------------------
 		// Member Methods
