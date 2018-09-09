@@ -19,26 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cpp-smallpt\core\cpp-smallpt.hpp" />
-    <ClInclude Include="cpp-smallpt\core\geometry.hpp" />
-    <ClInclude Include="cpp-smallpt\core\imageio.hpp" />
-    <ClInclude Include="cpp-smallpt\core\math_tools.hpp" />
-    <ClInclude Include="cpp-smallpt\core\rng.hpp" />
-    <ClInclude Include="cpp-smallpt\core\sampling.hpp" />
-    <ClInclude Include="cpp-smallpt\core\specular.hpp" />
-    <ClInclude Include="cpp-smallpt\core\sphere.hpp" />
-    <ClInclude Include="cpp-smallpt\core\stdafx.h" />
-    <ClInclude Include="cpp-smallpt\core\targetver.h" />
-    <ClInclude Include="cpp-smallpt\core\vector.hpp" />
+    <ClInclude Include="cpp-smallpt\src\geometry.hpp" />
+    <ClInclude Include="cpp-smallpt\src\imageio.hpp" />
+    <ClInclude Include="cpp-smallpt\src\math.hpp" />
+    <ClInclude Include="cpp-smallpt\src\rng.hpp" />
+    <ClInclude Include="cpp-smallpt\src\sampling.hpp" />
+    <ClInclude Include="cpp-smallpt\src\specular.hpp" />
+    <ClInclude Include="cpp-smallpt\src\sphere.hpp" />
+    <ClInclude Include="cpp-smallpt\src\vector.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cpp-smallpt\core\cpp-smallpt.cpp" />
-    <ClCompile Include="cpp-smallpt\core\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="cpp-smallpt\src\cpp-smallpt.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F717F97-896D-4209-A4FD-CE11DB062C45}</ProjectGuid>
@@ -94,30 +85,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="Properties\x64_Release.props" />
   </ImportGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Link>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ClCompile />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Link>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ClCompile />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Link>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ClCompile />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Link>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ClCompile />
-  </ItemDefinitionGroup>
   <PropertyGroup Label="UserMacros" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

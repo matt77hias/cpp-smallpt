@@ -1,0 +1,22 @@
+﻿Build started 09/09/2018 21:27:47.
+     1>Project "D:\Users\Matthias\Documents\Visual Studio 2017\Projects\cpp-smallpt\threads-cpp-smallpt\cpp-smallpt.vcxproj" on node 2 (Build target(s)).
+     1>InitializeBuildStatus:
+         Creating "cpp-smallpt\tmp\x64\Debug\cpp-smallpt.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\bin\HostX86\x64\CL.exe /c /ZI /JMC /nologo /W4 /WX- /diagnostics:classic /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:fast /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++latest /Fo"cpp-smallpt\tmp\x64\Debug\\" /Fd"cpp-smallpt\tmp\x64\Debug\vc141.pdb" /Gd /TP /FC /errorReport:prompt "cpp-smallpt\src\task.cpp"
+         task.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.15.26726\bin\HostX86\x64\link.exe /ERRORREPORT:PROMPT /OUT:"cpp-smallpt\bin\x64\Debug\cpp-smallpt.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"cpp-smallpt\bin\x64\Debug\cpp-smallpt.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"cpp-smallpt\bin\x64\Debug\cpp-smallpt.lib" /MACHINE:X64 "cpp-smallpt\tmp\x64\Debug\cpp-smallpt.obj"
+         "cpp-smallpt\tmp\x64\Debug\lock.obj"
+         "cpp-smallpt\tmp\x64\Debug\task.obj"
+         cpp-smallpt.vcxproj -> D:\Users\Matthias\Documents\Visual Studio 2017\Projects\cpp-smallpt\threads-cpp-smallpt\cpp-smallpt\bin\x64\Debug\cpp-smallpt.exe
+       FinalizeBuildStatus:
+         Deleting file "cpp-smallpt\tmp\x64\Debug\cpp-smallpt.tlog\unsuccessfulbuild".
+         Touching "cpp-smallpt\tmp\x64\Debug\cpp-smallpt.tlog\cpp-smallpt.lastbuildstate".
+     1>Done Building Project "D:\Users\Matthias\Documents\Visual Studio 2017\Projects\cpp-smallpt\threads-cpp-smallpt\cpp-smallpt.vcxproj" (Build target(s)).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.97

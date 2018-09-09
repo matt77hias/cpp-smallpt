@@ -9,54 +9,42 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;tpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\core">
+    <Filter Include="Header Files\src">
       <UniqueIdentifier>{7e28e46c-79a8-40f5-bea9-3672b61de19b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\core">
+    <Filter Include="Source Files\src">
       <UniqueIdentifier>{48732053-90d6-41a6-922b-62a6714b1f94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cpp-smallpt\core\cpp-smallpt.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\geometry.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\geometry.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\imageio.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\imageio.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\rng.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\math_tools.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\sampling.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\rng.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\specular.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\sampling.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\sphere.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\specular.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\vector.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\sphere.hpp">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\stdafx.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\targetver.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="cpp-smallpt\core\vector.hpp">
-      <Filter>Header Files\core</Filter>
+    <ClInclude Include="cpp-smallpt\src\math.hpp">
+      <Filter>Header Files\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cpp-smallpt\core\cpp-smallpt.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp-smallpt\core\stdafx.cpp">
-      <Filter>Source Files\core</Filter>
+    <ClCompile Include="cpp-smallpt\src\cpp-smallpt.cpp">
+      <Filter>Source Files\src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
