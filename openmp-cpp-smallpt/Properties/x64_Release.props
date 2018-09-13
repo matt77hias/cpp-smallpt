@@ -11,11 +11,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup>
-    <ClCompile>
-      <SDLCheck>true</SDLCheck>
+	  <SDLCheck>true</SDLCheck>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -27,27 +23,16 @@
       <XMLDocumentationFileName>$(ProjectName)\doc\</XMLDocumentationFileName>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
-    <Xdcmake>
-      <OutputFile>$(ProjectName)\doc\$(TargetName).xml</OutputFile>
-    </Xdcmake>
-    <FxCompile />
-    <FxCompile />
-    <FxCompile>
-      <VariableName>g_%(Filename)</VariableName>
-      <ObjectFileOutput />
-      <AdditionalIncludeDirectories>$(ProjectName)\shaders\</AdditionalIncludeDirectories>
-      <EnableDebuggingInformation>true</EnableDebuggingInformation>
-      <ShaderModel>5.0</ShaderModel>
-    </FxCompile>
-    <Link>
+	<Link>
       <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-    <Link>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+	  <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
     </Link>
+    <Xdcmake>
+      <OutputFile>$(ProjectName)\doc\$(TargetName).xml</OutputFile>
+    </Xdcmake>
   </ItemDefinitionGroup>
-  <ItemGroup />
 </Project>

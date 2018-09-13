@@ -8,21 +8,8 @@
     <IncludePath>$(ProjectName)\src\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
-    <Xdcmake>
-      <OutputFile>$(ProjectName)\doc\$(TargetName).xml</OutputFile>
-    </Xdcmake>
-    <FxCompile>
-      <AdditionalIncludeDirectories>$(ProjectName)\shaders\</AdditionalIncludeDirectories>
-    </FxCompile>
-    <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
-      <VariableName>g_%(Filename)</VariableName>
-      <ObjectFileOutput />
-    </FxCompile>
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
-    </ClCompile>
-    <ClCompile>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -34,6 +21,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
     </Link>
+    <Xdcmake>
+      <OutputFile>$(ProjectName)\doc\$(TargetName).xml</OutputFile>
+    </Xdcmake>
   </ItemDefinitionGroup>
-  <ItemGroup />
 </Project>

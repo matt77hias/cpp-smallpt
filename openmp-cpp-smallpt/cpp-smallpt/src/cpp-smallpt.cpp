@@ -16,6 +16,8 @@
 #pragma region
 
 #include <iterator>
+#include <memory>
+#include <optional>
 
 #pragma endregion
 
@@ -46,40 +48,31 @@ namespace smallpt {
 		Sphere(600,	 Vector3(50, 681.6 - .27, 81.6), Vector3(12), Vector3(),               Reflection_t::Diffuse)	 //Light
 	};
 
-	constexpr bool Intersect(const Ray &ray, size_t &id) noexcept {
-		bool hit = false;
-		for (size_t i = 0; i < std::size(g_spheres); ++i) {
+	[[nodiscard]]
+	constexpr std::optional< std::size_t > Intersect(const Ray& ray) noexcept {
+		std::optional< size_t > hit;
+		for (std::size_t i = 0u; i < std::size(g_spheres); ++i) {
 			if (g_spheres[i].Intersect(ray)) {
-				hit = true;
-				id = i;
+				hit = i;
 			}
 		}
 		
 		return hit;
 	}
 
-	constexpr bool Intersect(const Ray &ray) noexcept {
-		for (size_t i = 0; i < std::size(g_spheres); ++i) {
-			if (g_spheres[i].Intersect(ray)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	static const Vector3 Radiance(const Ray &ray, RNG &rng) noexcept {
+	[[nodiscard]]
+	static const Vector3 Radiance(const Ray& ray, RNG& rng) noexcept {
 		Ray r = ray;
 		Vector3 L;
 		Vector3 F(1.0);
 
 		while (true) {
-			size_t id;
-			if (!Intersect(r, id)) {
+			const auto hit = Intersect(r);
+			if (!hit) {
 				return L;
 			}
 
-			const Sphere &shape = g_spheres[id];
+			const Sphere& shape = g_spheres[hit.value()];
 			const Vector3 p = r(r.m_tmax);
 			const Vector3 n = Normalize(p - shape.m_p);
 
@@ -87,7 +80,7 @@ namespace smallpt {
 			F *= shape.m_f;
 
 			// Russian roulette
-			if (r.m_depth > 4) {
+			if (4u < r.m_depth) {
 				const double continue_probability = shape.m_f.Max();
 				if (rng.Uniform() >= continue_probability) {
 					return L;
@@ -100,7 +93,7 @@ namespace smallpt {
 			
 			case Reflection_t::Specular: {
 				const Vector3 d = IdealSpecularReflect(r.m_d, n);
-				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
+				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1u);
 				break;
 			}
 			
@@ -108,50 +101,51 @@ namespace smallpt {
 				double pr;
 				const Vector3 d = IdealSpecularTransmit(r.m_d, n, REFRACTIVE_INDEX_OUT, REFRACTIVE_INDEX_IN, pr, rng);
 				F *= pr;
-				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
+				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1u);
 				break;
 			}
 			
 			default: {
-				const Vector3 w = n.Dot(r.m_d) < 0 ? n : -n;
+				const Vector3 w = (0.0 > n.Dot(r.m_d)) ? n : -n;
 				const Vector3 u = Normalize((std::abs(w.m_x) > 0.1 ? Vector3(0.0, 1.0, 0.0) : Vector3(1.0, 0.0, 0.0)).Cross(w));
 				const Vector3 v = w.Cross(u);
 
 				const Vector3 sample_d = CosineWeightedSampleOnHemisphere(rng.Uniform(), rng.Uniform());
 				const Vector3 d = Normalize(sample_d.m_x * u + sample_d.m_y * v + sample_d.m_z * w);
-				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1);
+				r = Ray(p, d, EPSILON_SPHERE, INFINITY, r.m_depth + 1u);
 				break;
 			}
+			
 			}
 		}
 	}
 
-	inline void Render(uint32_t nb_samples) noexcept {
+	static void Render(std::uint32_t nb_samples) noexcept {
 		RNG rng;
 
-		const uint32_t w = 1024;
-		const uint32_t h = 768;
+		const std::uint32_t w = 1024u;
+		const std::uint32_t h = 768u;
 
-		const Vector3 eye = Vector3(50.0, 52.0, 295.6);
+		const Vector3 eye  = { 50.0, 52.0, 295.6 };
 		const Vector3 gaze = Normalize(Vector3(0.0, -0.042612, -1.0));
-		const double fov = 0.5135;
-		const Vector3 cx = Vector3(w * fov / h, 0.0, 0.0);
-		const Vector3 cy = Normalize(cx.Cross(gaze)) * fov;
+		const double fov   = 0.5135;
+		const Vector3 cx   = { w * fov / h, 0.0, 0.0 };
+		const Vector3 cy   = Normalize(cx.Cross(gaze)) * fov;
 
-		Vector3 * const Ls = new Vector3[w * h];
+		std::unique_ptr< Vector3[] > Ls(new Vector3[w * h]);
 
-#pragma omp parallel for schedule(static)
+		#pragma omp parallel for schedule(static)
 		for (int y = 0; y < static_cast< int >(h); ++y) { // pixel row
 
-			for (size_t x = 0; x < w; ++x) { // pixel column
+			for (std::size_t x = 0u; x < w; ++x) { // pixel column
 				
-				for (size_t sy = 0, i = (h - 1 - y) * w + x; sy < 2; ++sy) { // 2 subpixel row
+				for (std::size_t sy = 0u, i = (h - 1u - y) * w + x; sy < 2u; ++sy) { // 2 subpixel row
 					
-					for (size_t sx = 0; sx < 2; ++sx) { // 2 subpixel column
+					for (std::size_t sx = 0u; sx < 2u; ++sx) { // 2 subpixel column
 						
 						Vector3 L;
 						
-						for (size_t s = 0; s < nb_samples; ++s) { // samples per subpixel
+						for (std::size_t s = 0u; s < nb_samples; ++s) { // samples per subpixel
 							
 							const double u1 = 2.0 * rng.Uniform();
 							const double u2 = 2.0 * rng.Uniform();
@@ -160,22 +154,21 @@ namespace smallpt {
 							const Vector3 d = cx * (((sx + 0.5 + dx) * 0.5 + x) / w - 0.5) + 
 								              cy * (((sy + 0.5 + dy) * 0.5 + y) / h - 0.5) + gaze;
 							
-							L += Radiance(Ray(eye + d * 140.0, Normalize(d), EPSILON_SPHERE), rng) * (1.0 / nb_samples);
+							L += Radiance(Ray(eye + d * 130.0, Normalize(d), EPSILON_SPHERE), rng) * (1.0 / nb_samples);
 						}
+
 						Ls[i] += 0.25 * Clamp(L);
 					}
 				}
 			}
 		}
 
-		WritePPM(w, h, Ls);
-
-		delete[] Ls;
+		WritePPM(w, h, Ls.get());
 	}
 }
 
-int main(int argc, char *argv[]) {
-	const uint32_t nb_samples = (argc == 2) ? atoi(argv[1]) / 4 : 1;
+int main(int argc, char* argv[]) {
+	const std::uint32_t nb_samples = (2 == argc) ? atoi(argv[1]) / 4 : 1;
 	smallpt::Render(nb_samples);
 
 	return 0;
