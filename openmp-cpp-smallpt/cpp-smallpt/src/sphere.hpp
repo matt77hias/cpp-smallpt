@@ -61,8 +61,8 @@ namespace smallpt {
 		// Assignment Operators
 		//---------------------------------------------------------------------
 
-		constexpr Sphere& operator=(const Sphere& sphere) = default;
-		constexpr Sphere& operator=(Sphere&& sphere) = default;
+		Sphere& operator=(const Sphere& sphere) = default;
+		Sphere& operator=(Sphere&& sphere) = default;
 		
 		//---------------------------------------------------------------------
 		// Member Methods
