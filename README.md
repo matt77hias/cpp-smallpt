@@ -5,7 +5,7 @@
 [s3]: https://img.shields.io/badge/license-MIT-blue.svg
 
 [av]: https://ci.appveyor.com/project/matt77hias/cpp-smallpt
-[co]: https://www.codacy.com/app/matt77hias/cpp-samples?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matt77hias/cpp-samples&amp;utm_campaign=Badge_Grade
+[co]: https://www.codacy.com/app/matt77hias/cpp-smallpt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matt77hias/cpp-smallpt&amp;utm_campaign=Badge_Grade
 [li]: https://raw.githubusercontent.com/matt77hias/cpp-smallpt/master/LICENSE.txt
 
 # cpp-smallpt
