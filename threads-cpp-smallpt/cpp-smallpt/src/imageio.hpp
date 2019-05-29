@@ -26,7 +26,7 @@ namespace smallpt {
 	inline void WritePPM(std::uint32_t w, 
 						 std::uint32_t h, 
 						 const Vector3* Ls, 
-						 const char* fname = "cpp-image.ppm") noexcept {
+						 const char* fname = "threads-cpp-image.ppm") noexcept {
 		
 		FILE* fp;
 		
